@@ -39,6 +39,7 @@ jobs:
           ssh -i ~/.ssh/id_rsa ubuntu@$SERVER_IP << EOF
             cd /home/ubuntu/lululemon_api
             source venv/bin/activate
+            pip install -r requirements.txt
             python3 manage.py makemigrations
             python3 manage.py migrate
           EOF
