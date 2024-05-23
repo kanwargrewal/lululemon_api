@@ -1,0 +1,44 @@
+name: Deploy to AWS EC2 on push to main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install SSH Client
+        run: sudo apt-get update && sudo apt-get install -y ssh
+
+      - name: Copy repository to AWS EC2
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
+          rsync -avz --delete --exclude '.git*' ./ ubuntu@$SERVER_IP:/home/ubuntu/lululemon_api
+
+      - name: Restart server
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+        run: |
+          ssh -i ~/.ssh/id_rsa ubuntu@$SERVER_IP << EOF
+            cd /home/ubuntu/lululemon_api
+            source venv/bin/activate
+            python3 manage.py makemigrations
+            python3 manage.py migrate
+          EOF
