@@ -26,7 +26,6 @@ jobs:
 
       - name: Run tests
         run: |
-          cd /home/ubuntu/lululemon_api
           python manage.py test tests.py
 
       - name: Copy repository to AWS EC2
