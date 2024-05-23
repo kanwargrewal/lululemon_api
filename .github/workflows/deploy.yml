@@ -37,7 +37,7 @@ jobs:
           echo "$SSH_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
-          rsync -avz --delete --exclude 'venv/' --exclude '.git*' ./ ubuntu@$SERVER_IP:/home/ubuntu/lululemon_api
+          rsync -avz --delete --exclude 'venv/' --exclude '.git*' --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r ./ ubuntu@$SERVER_IP:/home/ubuntu/lululemon_api
 
       - name: Restart server
         env:
