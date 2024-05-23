@@ -26,7 +26,7 @@ jobs:
 
       - name: Run tests
         run: |
-          python manage.py test tests.py
+          python manage.py test
 
       - name: Copy repository to AWS EC2
         env:
