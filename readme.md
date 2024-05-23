@@ -326,3 +326,8 @@ No
     ]
 }
 ```
+
+### Server URL
+#### The server is hosted on AWS EC2 instance and can be accessed using the following URL:
+http://3.101.85.62:8000/api/products/
+
