@@ -13,7 +13,7 @@ This Django project provides a RESTful API endpoint that scrapes product details
 ### Installation
 Install the required packages using pip:
 ```bash
-pip install django djangorestframework requests django-redis
+pip install django djangorestframework requests
 ```
 ## API Reference
 ### Endpoints
