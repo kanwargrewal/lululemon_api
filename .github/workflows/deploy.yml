@@ -17,8 +17,17 @@ jobs:
         with:
           python-version: '3.8'
 
-      - name: Install SSH Client
-        run: sudo apt-get update && sudo apt-get install -y ssh
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ssh
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: |
+          cd scrapper
+          python manage.py test tests.py
 
       - name: Copy repository to AWS EC2
         env:
@@ -29,7 +38,7 @@ jobs:
           echo "$SSH_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
-          rsync -avz --delete --exclude 'venv/' --exclude '.git*' ./ ubuntu@SERVER_IP:/home/ubuntu/lululemon_api
+          rsync -avz --delete --exclude 'venv/' --exclude '.git*' ./ ubuntu@$SERVER_IP:/home/ubuntu/lululemon_api
 
       - name: Restart server
         env:
@@ -39,7 +48,6 @@ jobs:
           ssh -i ~/.ssh/id_rsa ubuntu@$SERVER_IP << EOF
             cd /home/ubuntu/lululemon_api
             source venv/bin/activate
-            pip install -r requirements.txt
             python3 manage.py makemigrations
             python3 manage.py migrate
           EOF
