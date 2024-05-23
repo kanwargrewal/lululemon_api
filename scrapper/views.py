@@ -34,7 +34,10 @@ class ProductScraper(APIView):
         for url in urls:
             cached_data = cache.get(url)
             if not cached_data:
-                response = requests.get(url)
+                try:
+                    response = requests.get(url)
+                except Exception as e:
+                    return [], f'Failed to fetch data from {url} - {str(e)}'
                 if response.status_code == 200:
                     data = response.json()
                     product_details = get_product_details(data)
