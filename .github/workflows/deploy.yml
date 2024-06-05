@@ -67,7 +67,7 @@ jobs:
             echo "Pulling Docker image..."
             docker pull kanwargrewal/lululemon_api:latest
             echo "Running Docker Compose..."
-            docker-compose -f /home/ubuntu/docker-compose.yml up -d
+            docker-compose -f /home/ubuntu/lululemon_api/docker-compose.yml up -d
 
             echo "Checking database permissions..."
             sudo chown ubuntu:ubuntu /home/ubuntu/lululemon_api/db.sqlite3
