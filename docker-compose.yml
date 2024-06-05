@@ -1,0 +1,14 @@
+version: '3'
+services:
+  web:
+    image: kanwargrewal/lululemon_api:latest
+    command: gunicorn lululemon_api.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/home/ubuntu/lululemon_api/static
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=0
+
+volumes:
+  static_volume:
